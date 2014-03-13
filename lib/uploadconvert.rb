@@ -36,7 +36,7 @@ class UploadConvert
   # Extract text from embedded text PDFs
   def embedPDF
     Docsplit.extract_text(@input, :ocr => false)
-    outfile = @input.split(".")
+    outfile = @input.split(".pdf")
     text = File.read(outfile[0]+".txt")
     
     # Clean up text and delete file
@@ -94,6 +94,7 @@ class UploadConvert
     @metadata[:date] = Docsplit.extract_date(@input)
     @metadata[:keywords] = Docsplit.extract_keywords(@input)
     @metadata[:length] = Docsplit.extract_length(@input)
+    return @metadata
   end
 end
 

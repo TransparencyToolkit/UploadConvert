@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'uploadconvert'
-  s.version     = '0.0.1'
+  s.version     = '0.0.3'
   s.date        = '2014-03-12'
   s.summary     = "Collected conversion tools for Transparency Toolkit"
   s.description = "Converts documents to the appropriate format for Transparency Toolkit."
