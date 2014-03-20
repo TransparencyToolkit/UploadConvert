@@ -1,7 +1,8 @@
 UploadConvert takes documents and converts them to a JSON format for Transparency Toolkit or other applications using the appropriate set of document conversion tools.
 
 To use-
-u = UploadConvert.new(file)
+u = UploadConvert.new(file or url)
+u.handleDoc (or use below methods for more specific handling)
 
 Convert PDF to JSON-
 u.pdfTojson
@@ -11,3 +12,6 @@ u.detectPDFType
 
 Extract metadata from PDF-
 u.extractMetadataPDF
+
+Convert XML to JSON-
+u.xmlTojson

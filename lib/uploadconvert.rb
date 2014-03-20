@@ -1,5 +1,6 @@
 require 'json'
 require 'docsplit'
+require 'crack'
 
 class UploadConvert
 
@@ -7,6 +8,26 @@ class UploadConvert
     @input = input
     @output = ""
     @text = ""
+  end
+
+  # Sends the document to the appropriate method
+  def handleDoc
+    if @input.include? "http"
+      `wget #{@input}`
+      path = @input.split("/")
+      @input = path[path.length-1].chomp.strip
+      handleDoc
+    elsif @input.include? ".pdf"
+      pdfTojson
+    elsif @input.include? ".xml"
+      xmlTojson(File.read(@input))
+    end
+  end
+
+  # Convert XML files to JSONs
+  def xmlTojson(xmlin)
+    xml = Crack::XML.parse(xmlin)
+    JSON.pretty_generate(xml)
   end
 
   # Convert PDFs to JSON
@@ -29,19 +50,22 @@ class UploadConvert
     if out.length > 4
       return embedPDF
     else
-      return ocrPDF
+      # return ocrPDF
     end
   end
 
   # Extract text from embedded text PDFs
   def embedPDF
-    Docsplit.extract_text(@input, :ocr => false)
-    outfile = @input.split(".pdf")
-    text = File.read(outfile[0]+".txt")
+    begin
+      Docsplit.extract_text(@input, :ocr => false)
+      outfile = @input.split(".pdf")
+      text = File.read(outfile[0]+".txt")
     
-    # Clean up text and delete file
-    File.delete(outfile[0]+".txt")
-    cleanPDF(text)
+      # Clean up text and delete file
+      File.delete(outfile[0]+".txt")
+      cleanPDF(text)
+    rescue
+    end
   end
 
   # OCR PDFs and turn that text into a JSON
@@ -97,4 +121,3 @@ class UploadConvert
     return @metadata
   end
 end
-
