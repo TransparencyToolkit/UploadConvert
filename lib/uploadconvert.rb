@@ -57,7 +57,7 @@ class UploadConvert
   # Extract text from embedded text PDFs
   def embedPDF
     begin
-      Docsplit.extract_text(@input, :ocr => false)
+      Docsplit.extract_text(@input, :ocr => false, :output => "public/uploads")
       outfile = @input.split(".pdf")
       text = File.read(outfile[0]+".txt")
     
