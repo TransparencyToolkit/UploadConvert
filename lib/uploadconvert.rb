@@ -60,7 +60,12 @@ class UploadConvert
     begin
       Docsplit.extract_text(@input, :ocr => false, :output => "public/uploads")
       outfile = @input.split(".pdf")
-      path = "public/uploads/" + outfile[0]
+      if outfile[0].include? "public/uploads/"
+        path = outfile[0]
+      else
+        path = "public/uploads/" + outfile[0]
+      end
+
       text = File.read(path+".txt")
       
       # Clean up text and delete file
