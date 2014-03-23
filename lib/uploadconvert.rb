@@ -1,6 +1,7 @@
 require 'json'
 require 'docsplit'
 require 'crack'
+require 'pry'
 
 class UploadConvert
 
@@ -35,7 +36,7 @@ class UploadConvert
     # Extract and clean text
     @text = detectPDFType
 
-    # Extract metadata and generate output                                                                                          
+    # Extract metadata and generate output
     extractMetadataPDF
     outhash = Hash.new
     @metadata.each{|k, v| outhash[k] = v}
@@ -59,10 +60,11 @@ class UploadConvert
     begin
       Docsplit.extract_text(@input, :ocr => false, :output => "public/uploads")
       outfile = @input.split(".pdf")
-      text = File.read(outfile[0]+".txt")
-    
+      path = "public/uploads/" + outfile[0]
+      text = File.read(path+".txt")
+      
       # Clean up text and delete file
-      File.delete(outfile[0]+".txt")
+      File.delete(path+".txt")
       cleanPDF(text)
     rescue
     end
@@ -121,3 +123,4 @@ class UploadConvert
     return @metadata
   end
 end
+
